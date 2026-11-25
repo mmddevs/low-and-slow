@@ -92,6 +92,8 @@ export class RunwayController {
   private readonly reduced: boolean;
   private readonly blurOn: boolean;
   private readonly speed: number;
+  /** "Shelf" layout: one straight line-up on every width, size pickers always in the sheet. */
+  private readonly shelf: boolean;
 
   private W = 0;
   private H = 0;
@@ -147,6 +149,7 @@ export class RunwayController {
     this.reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.blurOn = root.dataset.blur === "true";
     this.speed = Number(root.dataset.speed) || 5000;
+    this.shelf = root.dataset.layout === "shelf";
 
     this.n = this.heroes.length;
     this.N = this.n * Math.ceil(8 / this.n);
@@ -236,7 +239,7 @@ export class RunwayController {
   private measure() {
     const wasMobile = this.mobile;
     this.mobile = innerWidth <= PHONE_MAX;
-    const nextMode: Mode = this.mobile ? "classic" : "ring";
+    const nextMode: Mode = this.mobile && !this.shelf ? "classic" : "ring";
     const modeChanged = nextMode !== this.mode || this.first;
     this.mode = nextMode;
 
@@ -287,7 +290,7 @@ export class RunwayController {
       }
       this.updateRanks();
     }
-    if (wasMobile && !this.mobile) this.closeSheet(false);
+    if (wasMobile && !this.sheet) this.closeSheet(false);
 
     this.renderAll();
     this.kick();
@@ -311,9 +314,41 @@ export class RunwayController {
     }
   }
 
+  /** Size pickers open in the bottom sheet (phones, and the shelf layout everywhere). */
+  private get sheet() {
+    return this.mobile || this.shelf;
+  }
+
   private renderAll() {
-    if (this.mode === "ring") this.renderRing();
-    else this.renderClassic();
+    if (this.mode === "classic") this.renderClassic();
+    else if (this.shelf) this.renderLine();
+    else this.renderRing();
+  }
+
+  /**
+   * Shelf layout: every figure stands on the same floor in one straight
+   * line-up, the front one largest and the others shrinking towards the edges.
+   */
+  private renderLine() {
+    const { W, fs } = this;
+    const cx = 0.5 * W;
+    const sr = this.mobile ? 0.72 : 0.8;
+    const overlap = this.mobile ? 0.6 : 0.7;
+    const scaleAt = (u: number) => (u < 1 ? fs + (sr - fs) * u : Math.pow(sr, u));
+
+    this.bodies.forEach((b, a) => {
+      let k = mod(a - this.cur, this.N);
+      if (k > this.N / 2) k -= this.N;
+      const t = Math.abs(k);
+      let off = 0;
+      for (let i = 0; i < t; i++) {
+        const step = Math.min(1, t - i);
+        off += b.w * ((scaleAt(i) + scaleAt(i + 1)) / 2) * overlap * step;
+      }
+      let opacity = clamp(1 - 0.2 * t, 0, 1) * clamp((3.6 - t) / 0.5, 0, 1);
+      if (this.still && t < 0.02) opacity = 0;
+      this.put(b, cx + Math.sign(k) * off, 34, scaleAt(t), opacity, Math.min(0.45 * t, 1.6), 1000 - Math.round(10 * t));
+    });
   }
 
   private renderRing() {
@@ -487,7 +522,7 @@ export class RunwayController {
     this.first = false;
 
     this.closePopup();
-    if (this.mobile) this.closeSheet(false);
+    if (this.sheet) this.closeSheet(false);
     this.root.style.setProperty("--rw-progress", ((i + 1) / this.n).toFixed(3));
 
     this.heroes.forEach((hero, j) => {
@@ -989,7 +1024,7 @@ export class RunwayController {
   private openPicker(card: HTMLElement) {
     const picker = this.pickerOf(card);
     if (!picker) return;
-    if (this.mobile) {
+    if (this.sheet) {
       if (this.sheetCard && this.sheetCard !== card) this.closePicker(this.sheetCard, false);
       const host = this.ensureSheetHost();
       host.appendChild(picker);
@@ -1001,7 +1036,7 @@ export class RunwayController {
     card.classList.add("is-picking");
     card.querySelector("[data-rw-add]")?.setAttribute("aria-expanded", "true");
     picker.querySelector<HTMLInputElement>("input:checked")?.focus({ preventScroll: true });
-    if (!this.mobile) this.revealCard(card);
+    if (!this.sheet) this.revealCard(card);
   }
 
   private closePicker(card: HTMLElement | null, focusBack: boolean) {
@@ -1112,7 +1147,7 @@ export class RunwayController {
       cta.classList.remove("is-loading");
     }
     if (pending.length) {
-      (this.mobile ? pending.slice(0, 1) : pending).forEach((c) => {
+      (this.sheet ? pending.slice(0, 1) : pending).forEach((c) => {
         if (!c.classList.contains("is-picking")) this.openPicker(c);
       });
       this.revealCard(pending[0]);

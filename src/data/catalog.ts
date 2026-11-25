@@ -1,7 +1,8 @@
 /**
  * Static catalog for the runway: products, looks, pins and UI copy.
- * Brand: Low & Slow, a 1990s West Coast (Los Angeles) streetwear label,
- * presented as a swap meet stand. Visible copy is French; identifiers stay in English.
+ * Brand: Low & Slow, Chicano lowrider streetwear from East LA, presented as
+ * a single red room where the six looks stand in one line-up.
+ * Visible copy is French; identifiers stay in English.
  */
 
 export const BRAND = "Low & Slow";
@@ -17,18 +18,21 @@ export const ASSETS_READY = false;
 const DEMO_BASE = "https://reel-ref-try-the-look.vercel.app/assets";
 
 export type ProductId =
-  | "flannel-navy"
-  | "tee-xxl-white"
-  | "work-pant-khaki"
-  | "work-short-black"
+  | "wool-shirt-check"
+  | "tee-white-heavy"
+  | "satin-jacket-wine"
+  | "bowling-two-tone"
+  | "ike-jacket-black"
+  | "camp-shirt-palm"
+  | "work-pant-navy"
+  | "pleated-pant-black"
+  | "chino-sand"
   | "baggy-denim-raw"
-  | "satin-jacket-black"
-  | "wool-overshirt-check"
-  | "jersey-mesh-gold"
-  | "hoodie-black"
-  | "court-white"
+  | "work-short-grey"
   | "court-black"
-  | "canvas-slip-on";
+  | "court-white"
+  | "canvas-slip-white"
+  | "loafer-black";
 
 export interface Variant {
   id: number;
@@ -43,7 +47,7 @@ export interface Product {
   name: string;
   /** Short detail line (colour, cut). */
   detail: string;
-  /** Short label written on the price star. */
+  /** Short label engraved on the plaque. */
   short: string;
   price: number;
   kind: "shoe" | "apparel" | "bottom";
@@ -53,9 +57,9 @@ export interface Product {
 }
 
 const SIZES: Record<Product["kind"], string[]> = {
-  shoe: ["40", "41", "42", "43", "44", "45", "46"],
-  apparel: ["S", "M", "L", "XL", "XXL"],
-  bottom: ["30", "32", "34", "36", "38"],
+  shoe: ["36", "38", "40", "41", "42", "43", "44", "45"],
+  apparel: ["XS", "S", "M", "L", "XL", "XXL"],
+  bottom: ["26", "28", "30", "32", "34", "36", "38"],
 };
 
 /** Demo stand-in per kind, used until ASSETS_READY. */
@@ -64,6 +68,7 @@ const DEMO_IMAGE: Record<Product["kind"], { file: string; height: number; sheetH
     { file: "source-hoodie-black.webp", height: 536, sheetHeight: 214 },
     { file: "source-sweatshirt.webp", height: 581, sheetHeight: 232 },
     { file: "source-hoodie.webp", height: 555, sheetHeight: 222 },
+    { file: "source-sweatshirt-plus.webp", height: 610, sheetHeight: 244 },
   ],
   bottom: [{ file: "source-tshirt.webp", height: 563, sheetHeight: 225 }],
   shoe: [
@@ -73,7 +78,7 @@ const DEMO_IMAGE: Record<Product["kind"], { file: string; height: number; sheetH
   ],
 };
 
-let variantSeed = 9100;
+let variantSeed = 12400;
 let demoTurn = 0;
 
 function product(
@@ -102,18 +107,21 @@ function product(
 }
 
 export const products: Record<ProductId, Product> = {
-  "flannel-navy": product("flannel-navy", "Chemise flanelle", "Carreaux bleu nuit, boutonnée en haut", "Flanelle", "apparel", 48),
-  "tee-xxl-white": product("tee-xxl-white", "Tee XXL blanc", "Coton épais, coupe longue", "Tee XXL", "apparel", 28),
-  "work-pant-khaki": product("work-pant-khaki", "Pantalon de travail", "Khaki, coupe large, pli marqué", "Work pant", "bottom", 42),
-  "work-short-black": product("work-short-black", "Short de travail long", "Noir, sous le genou", "Short", "bottom", 36),
+  "wool-shirt-check": product("wool-shirt-check", "Chemise en laine", "Carreaux gris et noir, boutonnée en haut", "Laine", "apparel", 85),
+  "tee-white-heavy": product("tee-white-heavy", "Tee blanc épais", "Coton lourd, coupe ample, à rentrer", "Tee", "apparel", 28),
+  "satin-jacket-wine": product("satin-jacket-wine", "Veste en satin", "Bordeaux, script brodé dans le dos", "Satin", "apparel", 120),
+  "bowling-two-tone": product("bowling-two-tone", "Chemise de bowling", "Bicolore noir et crème, manches courtes", "Bowling", "apparel", 68),
+  "ike-jacket-black": product("ike-jacket-black", "Blouson court", "Noir, coupe Eisenhower, col chemise", "Blouson", "apparel", 95),
+  "camp-shirt-palm": product("camp-shirt-palm", "Chemise à palmiers", "Noire, imprimé palmiers crème", "Palmiers", "apparel", 56),
+  "work-pant-navy": product("work-pant-navy", "Pantalon de travail", "Bleu marine, pli repassé", "Work pant", "bottom", 42),
+  "pleated-pant-black": product("pleated-pant-black", "Pantalon taille haute", "Noir, à pinces, pli repassé", "Pinces", "bottom", 74),
+  "chino-sand": product("chino-sand", "Chino large", "Sable, pli repassé", "Chino", "bottom", 52),
   "baggy-denim-raw": product("baggy-denim-raw", "Denim baggy", "Brut, jambe très large", "Denim", "bottom", 58),
-  "satin-jacket-black": product("satin-jacket-black", "Veste en satin", "Noir et or, col côtelé", "Satin", "apparel", 120),
-  "wool-overshirt-check": product("wool-overshirt-check", "Surchemise en laine", "Grands carreaux gris et noir", "Laine", "apparel", 85),
-  "jersey-mesh-gold": product("jersey-mesh-gold", "Maillot en mesh", "Or et noir, numéro 47", "Maillot", "apparel", 64),
-  "hoodie-black": product("hoodie-black", "Sweat à capuche", "Noir, molleton lourd", "Hoodie", "apparel", 70),
-  "court-white": product("court-white", "Baskets cuir blanches", "Tige basse, liseré rouge", "Baskets", "shoe", 90),
-  "court-black": product("court-black", "Baskets cuir noires", "Tige basse, semelle blanche", "Baskets", "shoe", 90),
-  "canvas-slip-on": product("canvas-slip-on", "Chaussons en toile", "Noirs, à porter avec chaussettes hautes", "Toile", "shoe", 45),
+  "work-short-grey": product("work-short-grey", "Short long", "Gris, sous le genou", "Short", "bottom", 36),
+  "court-black": product("court-black", "Baskets cuir noires", "Tige basse, bande blanche", "Baskets", "shoe", 90),
+  "court-white": product("court-white", "Baskets cuir blanches", "Tige basse, bande bordeaux", "Baskets", "shoe", 90),
+  "canvas-slip-white": product("canvas-slip-white", "Chaussons en toile", "Blancs, avec chaussettes hautes", "Toile", "shoe", 45),
+  "loafer-black": product("loafer-black", "Mocassins en cuir", "Noirs, cuir ciré", "Mocassins", "shoe", 110),
 };
 
 export interface LookItem {
@@ -147,46 +155,46 @@ function pins(top: ProductId, bottom: ProductId, shoes: ProductId, tagTop?: stri
 
 export const looks: Look[] = [
   {
-    key: "crenshaw",
-    name: "Crenshaw Sunday",
-    description: "Flanelle boutonnée jusqu’en haut, pantalon de travail large, baskets blanches.",
-    model: model(1),
-    items: pins("flannel-navy", "work-pant-khaki", "court-white"),
-  },
-  {
-    key: "long-beach",
-    name: "Long Beach Drive",
-    description: "Tee XXL, short sous le genou, chaussettes montées et chaussons en toile.",
-    model: model(2),
-    items: pins("tee-xxl-white", "work-short-black", "canvas-slip-on", "Nouveau"),
-  },
-  {
-    key: "slauson",
-    name: "Slauson Swap",
-    description: "Veste en satin noir et or sur un denim brut très large.",
-    model: model(3),
-    items: pins("satin-jacket-black", "baggy-denim-raw", "court-white", "Nouveau"),
-  },
-  {
     key: "whittier",
-    name: "Whittier Cruise",
-    description: "Surchemise en laine à grands carreaux, denim brut, baskets noires.",
+    name: "Whittier Boulevard",
+    description: "Chemise en laine boutonnée en haut, pantalon marine au pli net, baskets noires.",
+    model: model(1),
+    items: pins("wool-shirt-check", "work-pant-navy", "court-black"),
+  },
+  {
+    key: "elysian",
+    name: "Elysian Park",
+    description: "Tee blanc rentré dans un pantalon taille haute, chaussons en toile.",
+    model: model(2),
+    items: pins("tee-white-heavy", "pleated-pant-black", "canvas-slip-white", "Nouveau"),
+  },
+  {
+    key: "candy-apple",
+    name: "Candy Apple",
+    description: "Veste en satin bordeaux, chino sable, baskets blanches.",
+    model: model(3),
+    items: pins("satin-jacket-wine", "chino-sand", "court-white", "Nouveau"),
+  },
+  {
+    key: "veterano",
+    name: "Veterano",
+    description: "Chemise de bowling, pantalon à pinces, mocassins cirés. La tenue du dimanche.",
     model: model(4),
-    items: pins("wool-overshirt-check", "baggy-denim-raw", "court-black"),
+    items: pins("bowling-two-tone", "pleated-pant-black", "loafer-black"),
   },
   {
-    key: "inglewood",
-    name: "Inglewood Court",
-    description: "Maillot en mesh sur tee blanc, short long, baskets blanches.",
+    key: "hydraulics",
+    name: "Hydraulics",
+    description: "Blouson court noir sur un denim brut très large.",
     model: model(5),
-    items: pins("jersey-mesh-gold", "work-short-black", "court-white"),
+    items: pins("ike-jacket-black", "baggy-denim-raw", "court-white"),
   },
   {
-    key: "compton",
-    name: "Compton Night",
-    description: "Tout en noir : capuche lourde, pantalon de travail, baskets noires.",
+    key: "sunset-cruise",
+    name: "Sunset Cruise",
+    description: "Chemise à palmiers, short long, chaussettes hautes et toile blanche.",
     model: model(6),
-    items: pins("hoodie-black", "work-pant-khaki", "court-black"),
+    items: pins("camp-shirt-palm", "work-short-grey", "canvas-slip-white"),
   },
 ];
 
@@ -205,12 +213,12 @@ for (const p of Object.values(products)) {
 }
 
 export const copy = {
-  pageTitle: "Low & Slow — Le défilé du stand 47",
+  pageTitle: "Low & Slow — Six silhouettes",
   pageDescription:
-    "Six looks West Coast montés de la tête aux pieds, au stand 47 du swap meet. Glisse le long du portant et touche une étiquette pour voir la pièce.",
-  title: "Sur le portant.",
-  subtitle: "Six looks West Coast, montés de la tête aux pieds. Touche une étiquette pour voir la pièce.",
-  stageLabel: "Le portant : utilise les flèches ou glisse pour changer de look",
+    "Six silhouettes lowrider d’East LA, alignées de la tête aux pieds. Fais défiler la rangée et touche un point pour voir la pièce.",
+  title: "Six silhouettes",
+  subtitle: "Lowrider, d’East LA. Touche un point pour voir la pièce.",
+  stageLabel: "La rangée : utilise les flèches ou glisse pour changer de silhouette",
   look: "Look",
   prev: "Look précédent",
   next: "Look suivant",
@@ -221,18 +229,18 @@ export const copy = {
   pieces: (n: number) => `${n} pièces`,
   viewLook: "Voir le look",
   close: "Fermer",
-  lbHint: "Touche une étiquette pour voir la pièce",
+  lbHint: "Touche un point pour voir la pièce",
   addToBag: "Mettre dans le sac",
   addToBagLabel: (name: string) => `Mettre dans le sac : ${name}`,
   addedLabel: (name: string) => `Dans le sac : ${name}`,
   shoeSize: "Pointure",
   size: "Taille",
   closeSizes: "Fermer le choix de taille",
-  bundleTitle: "Prends le lot",
+  bundleTitle: "Prends la tenue",
   bundleNote: (n: number) => `Les ${n} pièces ensemble : −10 %`,
-  ctaAdd: "Prendre le look complet",
-  ctaMobile: (price: string) => `Prendre le look — ${price}`,
-  ctaDone: "Le look complet est dans ton sac",
+  ctaAdd: "Prendre la tenue complète",
+  ctaMobile: (price: string) => `Prendre la tenue — ${price}`,
+  ctaDone: "La tenue complète est dans ton sac",
   msgChoose: "Choisis une taille pour : [items]",
   msgError: "Impossible de mettre dans le sac. Réessaie.",
   msgSoldOut: "Épuisé",

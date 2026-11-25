@@ -20,7 +20,7 @@ function downloadShortlist(rows: NonNullable<ReturnType<typeof resolve>>[]) {
     (r) => `${r.product.name} · Taille ${r.value} · Quantité ${r.entry.quantity} · ${formatMoney(r.product.price)}`,
   );
   const text = [
-    `${BRAND.toUpperCase()} — STAND 47 — TA SÉLECTION`,
+    `${BRAND.toUpperCase()} — TA SÉLECTION`,
     "Prix indicatifs. Aucune commande ni paiement n’a été effectué.",
     "",
     ...lines,
@@ -59,7 +59,7 @@ export function BagDialog() {
         const outside = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
         if (outside) bag.setOpen(false);
       }}
-      className="m-auto max-h-[85dvh] w-[min(560px,calc(100vw-32px))] overflow-auto border-[3px] border-ink bg-kraft p-6 text-ink shadow-[0_24px_48px_-16px_rgb(20_18_16/.6)]"
+      className="m-auto max-h-[85dvh] w-[min(560px,calc(100vw-32px))] overflow-auto rounded-[22px] border-0 bg-red-dk p-7 text-cream shadow-[0_30px_60px_-20px_rgb(40_0_4/.9)]"
     >
       {open && (
         <motion.div
@@ -68,7 +68,7 @@ export function BagDialog() {
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="bag-heading flex items-center justify-between gap-5">
-            <h2 id="bag-title" className="m-0 font-display text-[32px] leading-none font-normal uppercase">
+            <h2 id="bag-title" className="m-0 text-[36px] leading-none font-black uppercase font-stretch-extra-condensed">
               Ton sac
             </h2>
             <button
@@ -76,33 +76,33 @@ export function BagDialog() {
               id="close-bag"
               aria-label="Fermer le sac"
               onClick={() => bag.setOpen(false)}
-              className="grid size-11 cursor-pointer place-items-center border-2 border-ink bg-vinyl hover:bg-signal-yellow"
+              className="grid size-11 cursor-pointer place-items-center rounded-full border-[1.5px] border-cream bg-transparent text-cream hover:bg-cream hover:text-red-dk"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                 <path d="M5 5l14 14M19 5L5 19" />
               </svg>
             </button>
           </div>
-          <p className="bag-note text-[13px] leading-normal font-semibold text-muted">
+          <p className="bag-note text-[13px] leading-normal text-cream/80">
             Ta sélection reste sur cet appareil. Aucun paiement ni commande n’est fait ici : télécharge la liste
-            et passe au stand.
+            et garde-la sous la main.
           </p>
 
           <div id="bag-items">
             {rows.length === 0 ? (
-              <p className="bag-note text-[13px] leading-normal font-semibold text-muted">
+              <p className="bag-note text-[13px] leading-normal text-cream/80">
                 Ton sac est vide. Choisis une taille à côté d’une pièce pour la mettre de côté.
               </p>
             ) : (
               rows.map((r) => (
                 <div
                   key={r.entry.id}
-                  className="bag-row grid grid-cols-[60px_1fr_auto] items-center gap-[18px] border-b-2 border-dashed border-ink/30 py-[18px]"
+                  className="bag-row grid grid-cols-[60px_1fr_auto] items-center gap-[18px] border-b border-cream/20 py-[18px]"
                 >
-                  <img src={r.product.image.src} alt={r.product.name} width={60} height={80} className="h-20 w-[60px] border-2 border-ink bg-vinyl object-contain p-1" />
+                  <img src={r.product.image.src} alt={r.product.name} width={60} height={80} className="h-20 w-[60px] rounded-[10px] bg-cream object-contain p-1" />
                   <div>
-                    <h3 className="m-0 mb-1 text-[15px] font-extrabold">{r.product.name}</h3>
-                    <p className="m-0 text-[13px] font-semibold">
+                    <h3 className="m-0 mb-1 text-[15px] font-bold">{r.product.name}</h3>
+                    <p className="m-0 text-[13px] text-cream/80">
                       Taille {r.value} · Quantité {r.entry.quantity} · {formatMoney(r.product.price)}
                     </p>
                   </div>
@@ -110,7 +110,7 @@ export function BagDialog() {
                     type="button"
                     aria-label={`Retirer ${r.product.name}`}
                     onClick={() => bag.remove(r.entry.id)}
-                    className="grid size-11 cursor-pointer place-items-center border-0 bg-transparent hover:text-signal-red"
+                    className="grid size-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-cream/70 hover:text-cream"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                       <path d="M5 5l14 14M19 5L5 19" />
@@ -121,7 +121,7 @@ export function BagDialog() {
             )}
           </div>
 
-          <p id="bag-total" className="m-0 py-3 text-right text-[16px] font-extrabold">
+          <p id="bag-total" className="m-0 py-3 text-right text-[16px] font-extrabold tabular-nums">
             {rows.length ? `Sous-total indicatif ${formatMoney(total)}` : ""}
           </p>
           <button
@@ -129,7 +129,7 @@ export function BagDialog() {
             id="export-bag"
             disabled={rows.length === 0}
             onClick={() => downloadShortlist(rows)}
-            className="w-full cursor-pointer border-0 bg-ink px-5 py-4 font-display text-[19px] tracking-[.06em] text-signal-yellow uppercase transition-colors hover:bg-signal-red hover:text-vinyl disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-ink disabled:hover:text-signal-yellow"
+            className="w-full cursor-pointer rounded-full border-0 bg-cream px-5 py-4 text-[13px] font-extrabold tracking-[.12em] text-red-dk uppercase transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-cream"
           >
             Télécharger ma sélection
           </button>

@@ -198,7 +198,8 @@ export function RunwaySection() {
     <div
       ref={ref}
       id={SECTION_ID}
-      className="rw rw--add-icon rw--popup rw--stars rw--list has-dividers has-border"
+      className="rw rw--add-icon rw--popup rw--hero-pins rw--list has-dividers has-border"
+      data-layout="shelf"
       data-feel="balanced"
       data-blur="true"
       data-style="ring"
@@ -215,7 +216,7 @@ export function RunwaySection() {
         <div className="rw__grid">
           <div className="rw__left">
             <div className="rw__head">
-              <div className="rw__intro">
+              <div className="rw__intro rw__sr">
                 <h2 className="rw__title">{copy.title}</h2>
                 <p className="rw__sub">{copy.subtitle}</p>
               </div>
@@ -269,14 +270,13 @@ export function RunwaySection() {
                                 className="rw__pin"
                                 key={k}
                                 data-rw-pin={k + 1}
-                                data-tip={name}
+                                data-tip={`${name} · ${formatMoney(piece.price)}`}
                                 style={{ left: `${item.pin.left}%`, top: `${item.pin.top}%`, "--pi": k + 1 } as React.CSSProperties}
                                 aria-label={`${name}, ${formatMoney(piece.price)}`}
                                 tabIndex={-1}
                               >
                                 <span className="rw__pin-dot" aria-hidden="true">
-                                  <span className="sm-star-price">{piece.price} $</span>
-                                  <span className="sm-star-label">{piece.short}</span>
+                                  {k + 1}
                                 </span>
                               </button>
                             );

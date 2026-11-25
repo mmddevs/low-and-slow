@@ -21,7 +21,7 @@ export interface BagState {
   toast: BagToast | null;
 }
 
-const STORAGE_KEY = "low-and-slow-bag-v1";
+const STORAGE_KEY = "low-and-slow-bag-v2";
 const MAX_QTY = 20;
 const MAX_ENTRIES = 50;
 

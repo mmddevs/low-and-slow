@@ -33,7 +33,7 @@ export function BagToast() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduced ? 0 : 0.25 }}
-            className="m-0 whitespace-nowrap bg-ink px-5 py-3 text-xs text-white"
+            className="m-0 whitespace-nowrap rounded-full bg-cream px-5 py-3 text-xs font-bold text-red-dk shadow-[0_12px_24px_-10px_rgb(40_0_4/.7)]"
           >
             {toast.text}
           </motion.p>

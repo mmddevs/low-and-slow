@@ -16,7 +16,7 @@ A "try the look" runway: six styled looks shown as full-body models, each with p
 
 ## Positioning
 
-The label's own brand (name to be confirmed), dedicated to 1990s West Coast (Los Angeles) gangsta / hip-hop streetwear. Not Nike: the previous Nike reference was the 21st.dev demo it was ported from.
+Low & Slow, the label's own brand: Chicano lowrider streetwear from East Los Angeles, the pressed Sunday car show outfit. Presented as one red room where six looks stand in a line-up, the pieces on a shelf below (earlier iterations: swap meet in git history, a rejected gold "candy paint" car show). Not Nike: the previous Nike reference was the 21st.dev demo it was ported from.
 
 ## Capabilities and Constraints
 
@@ -27,11 +27,11 @@ The label's own brand (name to be confirmed), dedicated to 1990s West Coast (Los
 
 ## Brand Commitments
 
-- Style binding: 1990s West Coast LA streetwear (Dickies, buttoned flannel, oversized white tees, bandanas, Cortez-type sneakers, lowrider culture).
+- Style binding: Chicano lowrider Sunday style (buttoned wool shirts, pressed work pants and pleated trousers, bowling shirts, satin jackets, loafers and canvas slip-ons). Cast includes women and an older veterano.
 - Own label, no real brand names or logos (Nike, Dickies, etc.) in the shipped UI.
 - No gang-affiliation insignia or territorial signs used as decoration.
 
 ## Evidence on Hand
 
-- New model and product images: to be produced by the user with an image AI from prompts we write. Until then, placeholders. Do not present invented images as real products.
+- New model and product images: to be produced by the user with an image AI from the prompts in docs/prompts-images.md. Until then, placeholders. Do not present invented images as real products.
 - Prices, product names and sizes: none confirmed for the new label; current values are demo values.
