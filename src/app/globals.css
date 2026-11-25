@@ -1,26 +1,62 @@
 @import "tailwindcss";
+@import "../styles/runway.css";
+@import "../styles/swap-meet.css";
 
+/* Base theme tokens (the swap-meet layer overrides fonts and buttons). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --font-body--weight: 500;
+  --font-heading--weight: 400;
+  --style-border-radius-buttons-primary: 0px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #141210;
+  --color-muted: #3a2e20;
+  --color-vinyl: #f6f3ea;
+  --color-kraft: #c9a26a;
+  --color-peg: #d8cfbd;
+  --color-signal-red: #c8201a;
+  --color-signal-blue: #1d3f9e;
+  --color-signal-yellow: #ffec00;
+  --font-sans: var(--font-archivo), Helvetica, Arial, sans-serif;
+  --font-display: var(--font-anton), "Arial Narrow", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Reset lives in the base layer so Tailwind utilities can override it. */
+@layer base {
+  * { box-sizing: border-box; }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    font-family: var(--font-archivo), Helvetica, Arial, sans-serif;
+    color: #141210;
+    background: #d8cfbd;
   }
+
+  body { overflow-x: hidden; }
+
+  button,
+  input,
+  select { font: inherit; }
+
+  a { color: inherit; text-decoration: none; }
+  button { color: inherit; }
+
+  button,
+  a { -webkit-tap-highlight-color: transparent; }
+
+  button:focus-visible,
+  a:focus-visible { outline: 3px solid #141210; outline-offset: 3px; }
+
+  [hidden] { display: none !important; }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+#bag-dialog::backdrop {
+  background: #0005;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
