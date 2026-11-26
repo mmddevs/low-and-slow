@@ -940,7 +940,7 @@ export function ClothingRailHero({
               aria-label={item.name}
               aria-describedby={`${uid}-caption`}
               aria-pressed={turned}
-              className="absolute left-0 cursor-pointer rounded-xl outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+              className="absolute left-0 cursor-pointer rounded-xl outline-none focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-ring"
               style={{ top: railY - (HOOK_TOP / VB_H) * h, width: boxW, height: h, zIndex: turned ? 30 : 10 + i, visibility: lifted === i ? "hidden" : undefined, transform: `translate3d(${((sim.current.x[i] ?? 0) - boxW / 2).toFixed(2)}px,0,0)` }}
               onFocus={() => { setFocusIndex(i); if (pointer.current.id < 0) { stop(); choose(i); } }}
               onClick={(event) => { const pending = pendingOpen.current; pendingOpen.current = -1; if (event.detail === 0 || pending === i) open(i); }}
@@ -971,7 +971,7 @@ export function ClothingRailHero({
                 {item.tag && (
                   <span ref={(node) => { tags.current[i] = node; }} aria-hidden="true" className="pointer-events-none absolute left-1/2 origin-top" style={{ top: (32 / VB_H) * h, transform: "rotate(-12deg)" }}>
                     <span className="block h-3.5 w-px translate-x-0.75 bg-foreground/35" />
-                    <span className="block -translate-x-1/2 translate-x-0.75 whitespace-nowrap rounded-[3px] border border-foreground/10 bg-card px-1.5 pb-1 pt-2 text-[9px] font-semibold leading-none tracking-wide text-card-foreground shadow-[0_2px_6px_color-mix(in_oklab,var(--color-foreground)_18%,transparent)]">
+                    <span className="block -translate-x-1/2 whitespace-nowrap rounded-[3px] border border-foreground/10 bg-card px-1.5 pb-1 pt-2 text-[9px] font-semibold leading-none tracking-wide text-card-foreground shadow-[0_2px_6px_color-mix(in_oklab,var(--color-foreground)_18%,transparent)]">
                       <span className="absolute left-1/2 top-0.75 size-0.75 -translate-x-1/2 rounded-full bg-foreground/30" />
                       {item.tag}
                     </span>
@@ -1080,9 +1080,22 @@ function Detail({ uid, item, index, total, hanger, labels, action, aside, reduce
     spin();
   }, [spin]);
 
+  // The parent passes new callbacks on every render. The entrance below must run
+  // once per opening, so it reads them from here instead of depending on them.
+  const entrance = React.useRef({ source, onLift, reduced });
+  React.useLayoutEffect(() => { entrance.current = { source, onLift, reduced }; });
+
+  // The side picked with the buttons, keys or a drag; hovering only previews the other one.
+  const chosen = React.useRef("front" as "front" | "back");
+  const pick = React.useCallback((next: "front" | "back") => {
+    chosen.current = next;
+    turnTo(next);
+  }, [turnTo]);
+
   React.useLayoutEffect(() => {
     const figure = figureRef.current;
     const spinState = angle.current;
+    const { source, onLift, reduced } = entrance.current;
     const from = source();
     closeRef.current?.focus({ preventScroll: true });
     const overflow = document.body.style.overflow;
@@ -1102,8 +1115,8 @@ function Detail({ uid, item, index, total, hanger, labels, action, aside, reduce
       ], { duration: 680, easing: "cubic-bezier(.22,.85,.3,1)" });
     }
     const raf = requestAnimationFrame(() => setShown(true));
-    return () => { cancelAnimationFrame(raf); animation?.cancel(); document.body.style.overflow = overflow; cancelAnimationFrame(spinState.raf); onLift(false); };
-  }, [source, reduced, onLift]);
+    return () => { cancelAnimationFrame(raf); animation?.cancel(); document.body.style.overflow = overflow; cancelAnimationFrame(spinState.raf); spinState.raf = 0; spinState.last = 0; onLift(false); };
+  }, []);
 
   const dismiss = React.useCallback((byKeyboard: boolean) => {
     if (closing.current) return;
@@ -1130,16 +1143,16 @@ function Detail({ uid, item, index, total, hanger, labels, action, aside, reduce
       const dialog = dialogRef.current;
       if (!dialog || dialog.contains(event.target as Node)) return;
       if (event.key === "Escape") { event.preventDefault(); dismiss(true); }
-      else if (event.key === "ArrowLeft" || event.key === "ArrowRight") turnTo(side === "front" ? "back" : "front");
+      else if (event.key === "ArrowLeft" || event.key === "ArrowRight") pick(side === "front" ? "back" : "front");
       else if (event.key === "Tab") { const first = dialog.querySelector("button"); if (first) { event.preventDefault(); first.focus(); } }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [dismiss, turnTo, side]);
+  }, [dismiss, pick, side]);
 
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Escape") { event.preventDefault(); dismiss(true); return; }
-    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !(event.target instanceof HTMLSelectElement)) { turnTo(side === "front" ? "back" : "front"); return; }
+    if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !(event.target instanceof HTMLSelectElement)) { pick(side === "front" ? "back" : "front"); return; }
     if (event.key !== "Tab") return;
     const controls = [...(dialogRef.current?.querySelectorAll("button") ?? [])].filter((node) => !node.disabled);
     const first = controls[0];
@@ -1155,11 +1168,11 @@ function Detail({ uid, item, index, total, hanger, labels, action, aside, reduce
       <div
         className="absolute inset-0 cursor-grab touch-pan-y active:cursor-grabbing"
         style={{ perspective: "1400px" }}
-        onPointerEnter={(event) => { if (event.pointerType === "mouse" && !angle.current.dragging) turnTo("back"); }}
-        onPointerLeave={(event) => { if (event.pointerType === "mouse" && !angle.current.dragging) turnTo("front"); }}
+        onPointerEnter={(event) => { if (event.pointerType === "mouse" && !angle.current.dragging) turnTo(chosen.current === "front" ? "back" : "front"); }}
+        onPointerLeave={(event) => { if (event.pointerType === "mouse" && !angle.current.dragging) turnTo(chosen.current); }}
         onPointerDown={(event) => { const a = angle.current; a.dragging = true; a.startX = event.clientX; a.startAngle = a.value; cancelAnimationFrame(a.raf); a.raf = 0; a.last = 0; event.currentTarget.setPointerCapture(event.pointerId); }}
         onPointerMove={(event) => { const a = angle.current; if (!a.dragging) return; a.value = clamp(a.startAngle + (event.clientX - a.startX) * 0.45, a.startAngle - 220, a.startAngle + 220); if (spinRef.current) spinRef.current.style.transform = `rotateY(${a.value.toFixed(2)}deg)`; }}
-        onPointerUp={() => { const a = angle.current; if (!a.dragging) return; a.dragging = false; const facing = (((a.value % 360) + 360) % 360); turnTo(facing > 90 && facing < 270 ? "back" : "front"); }}
+        onPointerUp={() => { const a = angle.current; if (!a.dragging) return; a.dragging = false; const facing = (((a.value % 360) + 360) % 360); pick(facing > 90 && facing < 270 ? "back" : "front"); }}
         onPointerCancel={() => { angle.current.dragging = false; turnTo(side); }}
       >
         <div ref={spinRef} className="absolute inset-0 transform-3d">
@@ -1197,7 +1210,7 @@ function Detail({ uid, item, index, total, hanger, labels, action, aside, reduce
           )}
           <div role="group" aria-label={`${labels.front} / ${labels.back}`} className="mt-2 inline-flex justify-center gap-6 md:justify-start">
             {(["front", "back"] as const).map((face) => (
-              <button key={face} type="button" aria-pressed={side === face} onClick={() => turnTo(face)} className={`relative pb-1.5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${side === face ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+              <button key={face} type="button" aria-pressed={side === face} onClick={() => pick(face)} className={`relative pb-1.5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring ${side === face ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
                 {face === "front" ? labels.front : labels.back}
                 <span aria-hidden="true" className={`absolute inset-x-0 bottom-0 h-px origin-left bg-foreground transition-transform duration-300 motion-reduce:transition-none ${side === face ? "scale-x-100" : "scale-x-0"}`} />
               </button>
