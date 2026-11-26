@@ -1,37 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Low & Slow - Chicano Lowrider Streetwear Lookbook
 
-## Getting Started
+A **bold, immersive shopping experience** built with Next.js, Tailwind CSS, and TypeScript, featuring a single "red room" aesthetic, choreographed motion design, and a try-the-look architecture.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Runway line-up where six full-body looks stand on one floor and slide into the centre with drag, arrows, horizontal wheel, keyboard, or autoplay
+- Numbered pins placed on each garment, with name and price tooltips, linked to the matching piece on the shelf below
+- Zoomed look view with a full-height model and a side recap of the outfit, opening and closing through a shared-position flight animation
+- Size picker sheet on every piece and a one-tap full-outfit bundle at -10 %, priced in euros
+- Clothing rail with hanger physics for the six jackets and coats, brushed with the pointer or swiped on touch screens
+- Rail detail view that flips the garment on hover, shows the model wearing it, and completes the outfit with the two other pieces
+- Local shopping bag saved in the browser, with toast feedback and a downloadable text shortlist (no checkout or payment)
+- Responsive French interface with reduced-motion support, keyboard navigation, and a custom brand icon
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technologies Used
 
-## Learn More
+- **Next.js 16 (App Router)** - React framework with Turbopack and static generation
+- **React 19** - Component-based UI architecture and modern React hooks
+- **TypeScript** - Strongly typed JavaScript for robust scalability and maintainable development
+- **Tailwind CSS v4 + tw-animate-css** - Utility-first styling with design tokens in `globals.css` and a dedicated theme layer
+- **GSAP + Motion** - Runway choreography, flight transitions, dialog and toast animations
+- **CSS 3D transforms + SVG** - Perspective garment flips, drawn hangers, and a spring-based rail simulation
+- **Custom Google Fonts** - Archivo, self-hosted and variable in weight and width (Display and Body)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Preview
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# runway-atelier
+![Low & Slow Preview](public/preview.png)

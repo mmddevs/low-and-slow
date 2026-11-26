@@ -23,7 +23,7 @@ export function BagToast() {
       id="bag-status"
       role="status"
       aria-live="polite"
-      className="pointer-events-none fixed bottom-6 left-1/2 z-[2147483002] -translate-x-1/2"
+      className="pointer-events-none fixed bottom-6 left-1/2 z-2147483002 -translate-x-1/2"
     >
       <AnimatePresence>
         {toast && (

@@ -112,6 +112,8 @@ export class RunwayController {
   private engaged = false;
   private panelHover = false;
   private zoomed = false;
+  /** Whether the visitor's latest input was the keyboard: decides if closing the popup shows focus. */
+  private byKeyboard = false;
   private lbHero: HTMLElement | null = null;
   private lbClearTimer = 0;
 
@@ -624,6 +626,10 @@ export class RunwayController {
     const opts = { signal: this.ac.signal };
     const { root, stage } = this;
 
+    const input = { capture: true, signal: this.ac.signal };
+    document.addEventListener("keydown", () => (this.byKeyboard = true), input);
+    document.addEventListener("pointerdown", () => (this.byKeyboard = false), input);
+
     root.addEventListener(
       "click",
       (e) => {
@@ -715,7 +721,8 @@ export class RunwayController {
     let lastSize = "";
     const ro = new ResizeObserver(([entry]) => {
       const size = `${Math.round(entry.contentRect.width)}x${Math.round(entry.contentRect.height)}`;
-      if (size === lastSize) return;
+      // The zoomed view borrows the shelf's room: the line-up must keep its size.
+      if (this.zoomed || size === lastSize) return;
       lastSize = size;
       this.measure();
     });
@@ -1219,15 +1226,27 @@ export class RunwayController {
     const model = this.lbStage.firstElementChild as HTMLElement | null;
     const runway = this.lbHero?.querySelector<HTMLElement>(".rw__figure");
     const figure = model?.querySelector<HTMLElement>(".rw__figure");
-    if (model && runway && figure && !this.reduced) {
-      gsap.killTweensOf(model);
-      gsap.set(model, { x: 0, y: 0, scale: 1 });
-      gsap.to(model, { ...this.flipFrom(runway, figure), duration: 0.95, ease: "expo.out" });
-    }
+    const before = figure?.getBoundingClientRect();
     this.root.classList.remove("rw--zoom");
+    // Removing the class gives the shelf its room back and moves the popup figure:
+    // start the flight from where it was on screen, not from where it landed.
+    if (model && runway && figure && before && !this.reduced) {
+      gsap.killTweensOf(model);
+      gsap.set(model, { x: 0, y: 0, scale: 1, transformOrigin: "0% 100%" });
+      const rest = figure.getBoundingClientRect();
+      gsap.fromTo(
+        model,
+        { x: before.left - rest.left, y: before.bottom - rest.bottom, scale: rest.height ? before.height / rest.height : 1 },
+        { ...this.flipFrom(runway, figure), duration: 0.7, ease: "expo.out" },
+      );
+    }
     const hadFocus = this.lb.contains(document.activeElement);
     this.lb.setAttribute("aria-hidden", "true");
-    if (hadFocus) this.stage.focus({ preventScroll: true });
+    if (hadFocus) {
+      // Keyboard users get their place back; a mouse close must not leave a ring around the line-up.
+      if (this.byKeyboard) this.stage.focus({ preventScroll: true });
+      else (document.activeElement as HTMLElement | null)?.blur();
+    }
     this.clearHot();
     this.lbClearTimer = window.setTimeout(() => {
       if (!this.zoomed) this.lbStage.replaceChildren();

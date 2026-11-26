@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 @import "../styles/runway.css";
 @import "../styles/themes/red-line.css";
 
@@ -8,6 +9,17 @@
   --font-body--weight: 500;
   --font-heading--weight: 400;
   --style-border-radius-buttons-primary: 0px;
+}
+
+/* Emitted as real custom properties: the rail reads them in inline styles. */
+@theme static {
+  --color-background: #c4141f;
+  --color-foreground: #fff1e6;
+  --color-muted-foreground: #ffd9cf;
+  --color-card: #fff1e6;
+  --color-card-foreground: #8f0c15;
+  --color-border: rgb(255 241 230 / 0.35);
+  --color-ring: #fff1e6;
 }
 
 @theme inline {
@@ -20,7 +32,9 @@
 
 /* Reset lives in the base layer so Tailwind utilities can override it. */
 @layer base {
-  * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
   html,
   body {
@@ -32,22 +46,44 @@
     background: #c4141f;
   }
 
-  body { overflow-x: hidden; }
+  body {
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
 
   button,
   input,
-  select { font: inherit; }
+  select {
+    font: inherit;
+  }
 
-  a { color: inherit; text-decoration: none; }
-  button { color: inherit; }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    color: inherit;
+  }
 
   button,
-  a { -webkit-tap-highlight-color: transparent; }
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
 
   button:focus-visible,
-  a:focus-visible { outline: 2px solid #fff1e6; outline-offset: 3px; }
+  a:focus-visible {
+    outline: 2px solid #fff1e6;
+    outline-offset: 3px;
+  }
 
-  [hidden] { display: none !important; }
+  [hidden] {
+    display: none !important;
+  }
 }
 
 #bag-dialog::backdrop {

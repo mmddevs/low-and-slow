@@ -20,7 +20,7 @@ function downloadShortlist(rows: NonNullable<ReturnType<typeof resolve>>[]) {
     (r) => `${r.product.name} · Taille ${r.value} · Quantité ${r.entry.quantity} · ${formatMoney(r.product.price)}`,
   );
   const text = [
-    `${BRAND.toUpperCase()} — TA SÉLECTION`,
+    `${BRAND.toUpperCase()} - TA SÉLECTION`,
     "Prix indicatifs. Aucune commande ni paiement n’a été effectué.",
     "",
     ...lines,
@@ -97,9 +97,9 @@ export function BagDialog() {
               rows.map((r) => (
                 <div
                   key={r.entry.id}
-                  className="bag-row grid grid-cols-[60px_1fr_auto] items-center gap-[18px] border-b border-cream/20 py-[18px]"
+                  className="bag-row grid grid-cols-[60px_1fr_auto] items-center gap-4.5 border-b border-cream/20 py-4.5"
                 >
-                  <img src={r.product.image.src} alt={r.product.name} width={60} height={80} className="h-20 w-[60px] rounded-[10px] bg-cream object-contain p-1" />
+                  <img src={r.product.image.src} alt={r.product.name} width={60} height={80} className="h-20 w-15 rounded-[10px] bg-cream object-contain p-1" />
                   <div>
                     <h3 className="m-0 mb-1 text-[15px] font-bold">{r.product.name}</h3>
                     <p className="m-0 text-[13px] text-cream/80">

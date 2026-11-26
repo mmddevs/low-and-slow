@@ -12,17 +12,17 @@ Visitors of a streetwear label's shop who want to see complete outfits worn head
 
 ## Product Purpose
 
-A "try the look" runway: six styled looks shown as full-body models, each with pinned pieces (top, bottom, shoes) and a full-look bundle at −10 %. Success: the visitor adds a full look to the bag.
+A "try the look" runway: six styled looks shown as full-body models, each with pinned pieces (top, bottom, shoes) and a full-look bundle at -10 %. Success: the visitor adds a full look to the bag.
 
 ## Positioning
 
-Low & Slow, the label's own brand: Chicano lowrider streetwear from East Los Angeles, the pressed Sunday car show outfit. Presented as one red room where six looks stand in a line-up, the pieces on a shelf below (earlier iterations: swap meet in git history, a rejected gold "candy paint" car show). Not Nike: the previous Nike reference was the 21st.dev demo it was ported from.
+Low & Slow, the label's own brand: Chicano lowrider streetwear from East Los Angeles, now the "Cuir & Chrome" evening car show line: leather, suede, wide cuts in black, cream and chocolate. Presented as one red room where six looks stand in a line-up, the pieces on a shelf below, followed by a clothing rail section holding the six jackets and coats (earlier iterations: swap meet in git history, a rejected gold "candy paint" car show). Not Nike: the previous Nike reference was the 21st.dev demo it was ported from.
 
 ## Capabilities and Constraints
 
 - Next.js 16 App Router, Tailwind v4, GSAP + Motion. Runway controller in `src/lib/runway/controller.ts`, data in `src/data/catalog.ts`.
 - Models are full-body cutouts, front-facing, transparent background, 640×1138 (plus a large variant). Product images are cutouts too.
-- Bag is local (no checkout yet). Product links currently point to the demo Shopify store and must be replaced.
+- Bag is local (no checkout yet). Models are AI images supplied by the owner; piece thumbnails are crops of them until real product shots exist. Prices are placeholders in euros.
 - UI copy is French.
 
 ## Brand Commitments

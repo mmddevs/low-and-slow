@@ -21,7 +21,7 @@ export interface BagState {
   toast: BagToast | null;
 }
 
-const STORAGE_KEY = "low-and-slow-bag-v2";
+const STORAGE_KEY = "low-and-slow-bag-v3";
 const MAX_QTY = 20;
 const MAX_ENTRIES = 50;
 
@@ -91,7 +91,7 @@ export const bag = {
     ensureLoaded();
     for (const item of items) {
       const match = variantIndex.get(item.id);
-      if (!match || !match.available) throw new Error("Veuillez choisir une taille disponible.");
+      if (!match || !match.available) throw new Error("Choisis une taille disponible.");
     }
     const entries = state.entries.map((e) => ({ ...e }));
     for (const item of items) {
@@ -105,8 +105,8 @@ export const bag = {
         id: ++toastSeq,
         text:
           items.length > 1
-            ? "Look enregistré dans votre sac de style"
-            : "Pièce enregistrée dans votre sac de style",
+            ? "Le look est dans ton sac"
+            : "La pièce est dans ton sac",
       },
     });
     save();

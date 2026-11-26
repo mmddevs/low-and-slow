@@ -9,7 +9,7 @@ const linkClass =
  */
 export function SiteHeader() {
   return (
-    <header className="site-header shopify-section-group-header-group relative z-50 flex h-[64px] items-center gap-5 bg-red px-4 text-cream min-[750px]:h-[72px] min-[750px]:gap-8 min-[750px]:px-10">
+    <header className="site-header shopify-section-group-header-group relative z-50 flex h-16 items-center gap-5 bg-red px-4 text-cream min-[750px]:h-18 min-[750px]:gap-8 min-[750px]:px-10">
       <a href="./" className="mr-auto text-[26px] leading-none font-black uppercase font-stretch-extra-condensed min-[750px]:text-[30px]" aria-label="Low & Slow, accueil du défilé">
         Low &amp; Slow
       </a>
@@ -17,8 +17,11 @@ export function SiteHeader() {
         <a href="./" className={`${linkClass} max-[749px]:hidden`}>
           Accueil
         </a>
-        <a href="./" aria-current="page" className={`${linkClass} text-cream underline`}>
+        <a href="./" aria-current="page" className={`${linkClass} text-cream underline max-[749px]:hidden`}>
           Le défilé
+        </a>
+        <a href="#portant" className={linkClass}>
+          Le portant
         </a>
       </nav>
       <BagButton />

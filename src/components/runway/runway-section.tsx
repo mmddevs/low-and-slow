@@ -128,7 +128,7 @@ function ProductRow({ look, n }: { look: Look; n: number }) {
           <span data-rw-confirm-label="" data-add={copy.addToBag}>
             {copy.addToBag}
           </span>
-          <span className="rw__sr"> — {p.name}</span>
+          <span className="rw__sr"> - {p.name}</span>
         </button>
       </div>
     </li>
@@ -149,6 +149,7 @@ function LookPanel({ look, index }: { look: Look; index: number }) {
         <span className="rw__mhead-title">{look.name}</span>
         <span className="rw__label">{copy.pieces(count)}</span>
       </div>
+      <p className="rw__recap">{look.description}</p>
       <ul className="rw__items" role="list">
         {look.items.map((_, i) => (
           <ProductRow key={i} look={look} n={i + 1} />

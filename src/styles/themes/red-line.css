@@ -1,5 +1,5 @@
 /*
- * Low & Slow — "L'alignement".
+ * Low & Slow - "L'alignement".
  * Theme layer over runway.css: a single red room, the six figures standing in
  * one straight line-up (controller data-layout="shelf"), the three pieces on
  * a darker red shelf along the bottom. Two colours only: red and cream.
@@ -281,4 +281,65 @@ html { scrollbar-color: var(--lr-red-dk) var(--lr-red); }
   .rw__items { padding-left: 16px; padding-right: 16px; scroll-padding-inline: 16px; }
   .rw__bundle { padding-left: 16px; padding-right: 16px; }
   .rw__item { grid-template-columns: var(--rw-thumb) minmax(0, 1fr) 40px; }
+}
+
+/* long piece names wrap onto two lines instead of pushing the third piece off the shelf */
+@media (min-width: 750px) {
+  .rw__items .rw__item { flex: 0 1 auto; min-width: 0; }
+  .rw__items .rw__name { white-space: normal; line-height: 1.2; }
+}
+@media (min-width: 750px) and (max-width: 1299px) {
+  .rw__mhead { display: none; }
+  .rw__look-panel { grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; padding-inline: 20px; }
+  .rw__items .rw__item { padding-inline: 12px; }
+}
+
+/* ───────── zoomed look: full-height figure, the shelf turns into a recap column ───────── */
+.rw__recap { display: none; }
+@media (min-width: 750px) {
+  .rw { --lr-recap-w: 320px; }
+  .rw--zoom .rw__grid { position: relative; }
+  .rw__lb-stage { inset: 24px var(--lr-recap-w) 44px 24px; }
+  .rw__lb-top { right: var(--lr-recap-w); }
+  .rw__lb-hint { left: calc((100% - var(--lr-recap-w)) / 2); }
+  .rw--zoom .rw__controls { visibility: hidden; }
+  /* the recap already names the look */
+  .rw__lb-cap { visibility: hidden; }
+  .rw--zoom .rw__panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 45;
+    width: var(--lr-recap-w);
+    overflow-y: auto;
+    background: var(--lr-red-dk);
+    animation: lr-recap-in .6s var(--rw-ease) .15s backwards;
+  }
+  .rw--zoom .rw__panel-inner { min-height: 100%; display: flex; flex-direction: column; }
+  .rw--zoom .rw__look-panel { flex: 1; display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 20px; padding: 28px 24px; }
+  .rw--zoom .rw__look-panel[hidden] { display: none; }
+  .rw--zoom .rw__mhead { display: flex; }
+  .rw--zoom .rw__mhead-title { font-size: 44px; white-space: normal; line-height: .9; }
+  .rw--zoom .rw__recap { display: block; margin: 0; max-width: 34ch; font-size: 15px; line-height: 1.55; color: var(--lr-cream-dim); text-wrap: pretty; }
+  .rw--zoom .rw__items { flex-direction: column; overflow: visible; padding: 0; }
+  .rw--zoom .rw__items .rw__item,
+  .rw--zoom.has-dividers .rw__items .rw__item {
+    grid-template-columns: 76px minmax(0, 1fr) 40px;
+    column-gap: 14px;
+    padding: 14px 0;
+    border: 0;
+    border-top: 1px solid var(--lr-cream-line);
+  }
+  .rw--zoom .rw__items .rw__media { width: 76px; height: 76px; }
+  .rw--zoom .rw__type { display: block; font-size: 13px; font-weight: 500; letter-spacing: 0; text-transform: none; line-height: 1.4; color: var(--lr-cream-dim); }
+  .rw--zoom .rw__bundle { flex-direction: column; align-items: stretch; }
+  .rw--zoom .rw__cta { width: 100%; }
+  .rw--zoom .rw__msg { left: 0; max-width: none; }
+}
+@media (min-width: 1100px) {
+  .rw { --lr-recap-w: 420px; }
+  .rw--zoom .rw__look-panel { padding: 32px 36px; }
+}
+@keyframes lr-recap-in { from { opacity: 0; transform: translateX(32px); } }
+@media (prefers-reduced-motion: reduce) {
+  .rw--zoom .rw__panel { animation: none; }
 }
